@@ -18,3 +18,5 @@ const score_index = (req, res) => {
             res.send(result)
     })
 }
+
+module.exports = { score_create_post, score_index }
