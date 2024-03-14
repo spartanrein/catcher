@@ -4,6 +4,7 @@ const app = express()
 var morgan = require('morgan')
 const mongoose = require('mongoose')
 const uri = process.env.MONGODB_URI;
+const scoreRoutes = require('./routes/scoreRoutes')
 const cors = require('cors')
 const db = mongoose.connect(uri)
     .then(result => {
@@ -22,3 +23,4 @@ app.use((req, res, next) => {
     next();
 });
 app.use(express.json())
+app.use('/scores', scoreRoutes)
