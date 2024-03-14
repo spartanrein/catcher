@@ -6,6 +6,7 @@ export const store = configureStore({
         [scoreApi.reducerPath]: scoreApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
+        .concat(scoreApi.middleware)
 })
 
 setupListeners(store.dispatch)
