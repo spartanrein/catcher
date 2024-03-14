@@ -10,11 +10,11 @@ export const scoreApi = createApi({
             providesTags:['Scores']
         }),
         postAddScore: builder.mutation({
-            query: ({name, score}) => ({
+            query: ({playerName, score}) => ({
                 url: '/',
                 method: 'POST',
                 body: {
-                    name:name,
+                    playerName:playerName,
                     score: score
                 }
             }),
