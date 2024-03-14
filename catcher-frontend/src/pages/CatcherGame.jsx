@@ -17,9 +17,11 @@ export const CatcherGame = () => {
             var boatImg = new Image()
             boatImg.src = boat;
             spawnFallingItem(ctx, canvas, itemObject, boatImg)
-            // ItemMovement(ctx, boatObj, imgTag)
             renderBoat(ctx, canvas, boatProps, boatImg)
             requestAnimationFrame(render)
+            if (collision(boatProps, itemObject)){
+                console.log('!!!boom!')
+            }
         }
         render()
     },[boatProps])
@@ -44,12 +46,11 @@ function spawnFallingItem(ctx, canvas, itemObject, image) {
     let item = new FallingItem(ctx, canvas, itemObject.x, itemObject.y, 10, image)
     item.move()
     if (itemObject.y < 500){
-        itemObject.y+= 3
+        itemObject.y++
     } else {
         itemObject.x = Math.floor(Math.random() * 700)
         itemObject.y = 0
     }
-    console.log('!!!', itemObject)
 }
 
 class FallingItem {
@@ -62,11 +63,18 @@ class FallingItem {
         this.score = score
     }
     move() {
-        this.image.onload = () => {
-            this.ctx.drawImage(this.image, this.x, this.y, 50, 50)
-        }
-        this.ctx.drawImage(this.image, this.x, this.y, 50, 50)
+        this.ctx.drawImage(this.image, this.x, this.y, 100, 100)
     }
+}
+
+function collision(boatProps, fallingItem) {
+    console.log('!!!', boatProps)
+    return (
+        boatProps.x >= fallingItem.x &&
+        fallingItem.x >= boatProps.x &&
+        boatProps.y >= fallingItem.y &&
+        fallingItem.y >= boatProps.y
+    )
 }
 
 export default CatcherGame

@@ -5,7 +5,8 @@ export default {
     },
 
     boatProps: {
-        x: 100
+        x: 100,
+        y: 350
     },
 
     itemObject: {
