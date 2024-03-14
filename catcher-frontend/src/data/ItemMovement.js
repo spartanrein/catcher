@@ -3,8 +3,6 @@ export function ItemMovement(ctx, itemObj, image) {
     data.draw(ctx);
     itemObj.x += itemObj.dx;
     itemObj.y += itemObj.dy;
-
-
 }
 
 class Item {
@@ -17,5 +15,6 @@ class Item {
         this.image.onload = () => {
             ctx.drawImage(this.image, 0, 0, 100, 100)
         };
+        this.ctx.drawImage(this.image, this.x, 350, 100, 100)
     }
 }

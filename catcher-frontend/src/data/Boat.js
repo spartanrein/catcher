@@ -1,5 +1,4 @@
-export default (ctx, canvas, boatProps, image) => {
-
+export const renderBoat = (ctx, canvas, boatProps, image) => {
     let boat = new Boat(ctx, canvas, boatProps.x, image)
     boat.move();
     if (boatProps.x <= 0) {
@@ -23,3 +22,5 @@ class Boat {
         this.ctx.drawImage(this.image, this.x, 350, 100, 100)
     }
 }
+
+export default renderBoat
