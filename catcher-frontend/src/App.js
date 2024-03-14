@@ -7,8 +7,12 @@ function App() {
 
   return (
     <>
-      <CatcherGame/>
+      
       <Container sx={{paddingTop:'5%'}}>
+        <Box sx={{display: 'flex', width:'100%', justifyContent:'center',}}>
+          <CatcherGame/>
+        </Box>
+      
         <Box sx={{display:'flex', width:'100%', justifyContent:'center'}}>
           <Stack>
             <Typography variant="h5">All Time High Scores</Typography>

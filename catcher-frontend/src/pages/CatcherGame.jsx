@@ -1,23 +1,29 @@
 import { React, useRef, useEffect } from 'react'
 import boat from '../assets/boat.png'
-import data from '../data/data'
-import { ItemMovement } from '../data/ItemMovement'
-import renderBoat from '../data/Boat'
-import { Box } from '@mui/material'
+import {objectProps} from '../data/data'
+import BaseObject from '../objects/BaseObject'
+import { renderObject } from '../utils/utils'
 
 export const CatcherGame = () => {
-    let { boatObj, boatProps, itemObject } = data;
+    let { boatProps, itemObject } = objectProps;
 
     const canvasRef = useRef(null)
     useEffect(() => {
+        const canvas = canvasRef.current
+        const ctx = canvas.getContext("2d")
+        
         const render = () => {
-            const canvas = canvasRef.current
-            const ctx = canvas.getContext("2d")
-            ctx.clearRect(0, 0, canvas.width, canvas.height)
-            var boatImg = new Image()
+            let boatImg = new Image()
             boatImg.src = boat;
+            let playerBoat = new BaseObject(ctx, canvas, boatImg, boatProps.x, boatProps.y, boatProps.width)
+            canvas.width = window.innerWidth
+            canvas.height = 3*window.innerWidth/4
+            boatProps.y = canvas.getBoundingClientRect().height-canvas.width/8
+            boatProps.width = canvas.width/8
+            ctx.clearRect(0, 0, canvas.width, canvas.height)
+            renderObject(ctx, canvas, boatImg, playerBoat,  boatProps)
             spawnFallingItem(ctx, canvas, itemObject, boatImg)
-            renderBoat(ctx, canvas, boatProps, boatImg)
+            // renderBoat(ctx, canvas, boatProps, boatImg)
             requestAnimationFrame(render)
             if (collision(boatProps, itemObject)){
                 console.log('Collision Detected')
@@ -25,18 +31,24 @@ export const CatcherGame = () => {
             }
         }
         render()
-    },[boatProps])
+    },[boatProps, itemObject])
 
     return (
         <canvas 
             ref={canvasRef} 
             className="canvas" 
             id="canvas" 
-            width={800}
-            height={500}
-            onMouseMove={(event) => boatProps.x = event.clientX - 50}
+            onMouseMove={(evt) => boatProps.x = getMousePos(canvasRef.current, evt).x -50}
         />
     )
+}
+
+function getMousePos(canvas, evt) {
+    var rect = canvas.getBoundingClientRect();
+    return {
+        x: evt.clientX - rect.left,
+        y: evt.clientY - rect.top
+    }
 }
 
 function sleep(ms) {
@@ -49,8 +61,6 @@ function spawnFallingItem(ctx, canvas, itemObject, image) {
     if (itemObject.y < 500){
         itemObject.y++
     } else {
-        // itemObject.x = Math.floor(Math.random() * 700)
-        // itemObject.y = 0
         resetPosition(itemObject)
     }
 }

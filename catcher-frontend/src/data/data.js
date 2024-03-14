@@ -1,12 +1,8 @@
-export default {
-    boatObj: {
-        x: 0,
-        y: 350,
-    },
-
+export let objectProps = {
     boatProps: {
         x: 100,
-        y: 350
+        y: 100,
+        width: 100
     },
 
     itemObject: {
