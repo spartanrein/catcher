@@ -23,4 +23,4 @@ export const scoreApi = createApi({
     })
 })
 
-export const { useGetScoresQuery, usePostAddAddScoreMutation } = scoreApi
+export const { useGetScoresQuery, usePostAddScoreMutation } = scoreApi
