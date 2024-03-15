@@ -54,7 +54,7 @@ function App() {
                   }}
                   disabled={playerName === "" || isStartGame}
                   variant={"contained"}>
-                    Start Game
+                    Start!
                 </Button>
               </Box>
               <Box>
