@@ -8,11 +8,11 @@ import { useSelector } from 'react-redux';
 function App() {
   const score = useSelector((state) => state.player.score)
   return (
-    <Container>
-        <Stack>
+    <>
+        <Box>
           <CatcherGame/>
-          {/* <Typography variant={'h2'}>{`Score: ${score}`}</Typography> */}
-        </Stack>
+          <Typography variant={'h4'}>{`Score: ${score}`}</Typography>
+        </Box>
           
         {/* <Box sx={{display:'flex', width:'100%', justifyContent:'center'}}>
           <Stack>
@@ -21,7 +21,7 @@ function App() {
           </Stack>
         </Box>
         <TopScores/> */}
-    </Container>
+    </>
     
   );
 }

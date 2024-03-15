@@ -17,7 +17,6 @@ export const CatcherGame = () => {
     useEffect(() => {
         const canvas = canvasRef.current
         const ctx = canvas.getContext("2d")
-
         const render = () => {
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             let boatImg = new Image()
@@ -25,8 +24,7 @@ export const CatcherGame = () => {
             let playerBoat = new BaseObject(ctx, canvas, boatImg, boatProps.x, boatProps.y, boatProps.width)
             canvas.width = window.innerWidth
             canvas.height = window.innerWidth/2
-            ctx.scale(1,0.75)
-            boatProps.y = canvas.getBoundingClientRect().height
+            boatProps.y = canvas.getBoundingClientRect().height - canvas.getBoundingClientRect().height/3
             boatProps.width = canvas.width/8
             renderObject(ctx, canvas, boatImg, playerBoat,  boatProps)
             spawnFallingItem(ctx, canvas, itemObject, boatImg)
