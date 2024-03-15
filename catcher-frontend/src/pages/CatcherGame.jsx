@@ -41,7 +41,7 @@ export const CatcherGame = () => {
                 if (collision(boatProps, canvas.width/12, itemObject, canvas.width/14, 10)){
                     console.log('Collision Detected')
                     dispatch(addScore(10))
-                    resetPosition(itemObject)
+                    resetPosition(itemObject, canvas)
                 }
             }
             requestAnimationFrame(render)
@@ -72,12 +72,12 @@ function spawnFallingItem(ctx, canvas, itemObject, image) {
     if (itemObject.y < canvas.height){
         itemObject.y++
     } else {
-        resetPosition(itemObject)
+        resetPosition(itemObject, canvas)
     }
 }
 
-function resetPosition(object){
-    object.x = Math.floor(Math.random() * 700)
+function resetPosition(object, canvas){
+    object.x = Math.floor(Math.random() * canvas.width)
     object.y = 0 
 }
 
