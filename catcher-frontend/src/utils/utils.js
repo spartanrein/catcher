@@ -6,3 +6,7 @@ export const renderObject = (ctx, canvas,image, object, objectProps, ) => {
         objectProps.x = canvas.width
     }
 };
+
+export function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}

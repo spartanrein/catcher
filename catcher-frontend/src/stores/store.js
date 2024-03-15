@@ -1,10 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { scoreApi } from '../services/scores'
 import { setupListeners } from '@reduxjs/toolkit/query'
-import playerReducer from '../features/playerSlice'
+import gameReducer from '../features/gameSlice'
 export const store = configureStore({
     reducer: {
-        player: playerReducer,
+        player: gameReducer,
         [scoreApi.reducerPath]: scoreApi.reducer,
     },
     middleware: (getDefaultMiddleware) => getDefaultMiddleware()
