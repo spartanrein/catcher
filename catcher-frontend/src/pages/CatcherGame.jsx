@@ -33,18 +33,18 @@ export const CatcherGame = () => {
     
     useEffect(() => {
         const timer = isStartGame && counter > 0 && setTimeout(() => setCounter(counter -1), 1000);
-        if (counter === 50){
+        if (counter === 0){
           dispatch(stopGame())
           setHasScore(true)
         }
         return () => clearInterval(timer)
     },[counter, isStartGame, dispatch])
     
-    //   useEffect(() => {
-    //     if (hasScore && score > 0){
-    //       addTotalScore({score:score})
-    //     }
-    //   },[hasScore, addScore, playerName, score])
+    useEffect(() => {
+    if (hasScore && score > 0){
+        addTotalScore({score:score, playerName: playerName})
+    }
+    },[hasScore, addScore, playerName, score])
 
     useEffect(() => {
         if (!isStartGame){
@@ -93,12 +93,6 @@ export const CatcherGame = () => {
         return {backgroundImg, boatImg}
     }
 
-    // <TextField
-    //     label={"Enter Player Name"}
-    //     onChange={(e) => dispatch(setPlayerName(e.target.value))}
-    //     disabled={isStartGame}
-    // />
-
     return (
         <>
             <canvas
@@ -110,17 +104,6 @@ export const CatcherGame = () => {
                 <Box>
                     <Typography variant={'h5'}>{`Score: ${score}`}</Typography>
                 </Box>
-                <Button 
-                    onClick={async () => {
-                    setHasScore(false)
-                    dispatch(resetScore())
-                    setCounter(60)
-                    dispatch(startGame())
-                    }}
-                    disabled={isStartGame}
-                    variant={"contained"}>
-                    Start!
-                </Button> 
                 <Box>
                     <Typography variant={'h5'}>{`Timer: ${counter}`}</Typography>
                 </Box>
