@@ -9,9 +9,6 @@ export default class BaseObject {
     }
 
     render(){
-        this.image.onload = () => {
-            this.ctx.drawImage(this.image, this.posX, this.posY, this.width, this.width)
-        }
         this.ctx.drawImage(this.image, this.posX, this.posY, this.width, this.width)
     }
 }

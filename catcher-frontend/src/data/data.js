@@ -7,6 +7,7 @@ export let objectProps = {
 
     itemObject: {
         x: 20,
-        y: 0
+        y: 0,
+        speed: 2
     }
 };

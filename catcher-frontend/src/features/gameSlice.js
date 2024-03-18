@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     playerName: "",
     score: 0,
-    isStartGame: false
+    isStartGame: true
 }
 
 const gameSlice = createSlice({
