@@ -8,6 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useGetScoresQuery } from '../services/scores';
 import { Box, Stack, TablePagination, Typography } from '@mui/material';
+import Error from './Error';
 
 function createData(rank, playerName, score) {
   return { rank, playerName, score };
@@ -18,7 +19,6 @@ export default function TopScores() {
     const [rowsPerPage, setRowsPerPage] = useState(10)
     const { data, error, isLoading } = useGetScoresQuery()
     const scores = data?.map((d, index) => {return createData(index+1, d.playerName, d.score)})
-
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
@@ -29,7 +29,8 @@ export default function TopScores() {
     };
 
     return (
-        <>
+        <>  
+            {!error ? <>
             <Box sx={{display:'flex', width:'100%', justifyContent:'center'}}>
                 <Stack>
                 <Typography variant="h5">All Time High Scores</Typography>
@@ -64,12 +65,12 @@ export default function TopScores() {
             <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={scores.length}
+                count={scores?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-            />
+            /> </>: <Error/>}
         </>
     );
 }
