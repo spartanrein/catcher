@@ -38,6 +38,12 @@ export const CatcherGame = () => {
     },[counter, isStartGame, dispatch])
     
     useEffect(() => {
+    //Check if user has player name set in main manu
+    if (!playerName){
+        alert('Please enter your player name on the main menu')
+        navigate('/')
+    }
+
     if (hasScore && score > 0){
         addTotalScore({score:score, playerName: playerName})
         alert('Game Over!')
@@ -45,13 +51,6 @@ export const CatcherGame = () => {
     }
     },[hasScore, playerName, score, addTotalScore, navigate])
 
-    useEffect(() => {
-        if (!playerName){
-            alert('Please enter your player name on the main menu')
-            navigate('/')
-        }
-    },[navigate, playerName])
-    
     useEffect(() => {
         const timerIdHolder = {timerId: null}
         let canvas = canvasRef.current
