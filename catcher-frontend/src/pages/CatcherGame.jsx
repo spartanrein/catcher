@@ -1,4 +1,4 @@
-import { React, useRef, useEffect, useState, forwardRef } from 'react'
+import { React, useRef, useEffect, useState } from 'react'
 import boat from '../assets/boat.png'
 import e1 from '../assets/e1.png'
 import e2 from '../assets/e2.png'
@@ -11,8 +11,7 @@ import { objectProps } from '../data/data'
 import BaseObject from '../objects/BaseObject'
 import { collision, getMousePos, renderObject, resetPosition, spawnFallingItem } from '../utils/utils'
 import { useDispatch, useSelector } from 'react-redux'
-import FallingObject from '../objects/FallingObject'
-import { Box, Typography, Button } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { stopGame, addScore } from '../features/gameSlice';
 import { usePostAddScoreMutation } from '../services/scores';
 import { useNavigate } from 'react-router-dom'
@@ -22,7 +21,7 @@ export const CatcherGame = () => {
     let canvasRef = useRef(null)
     const [counter, setCounter] = useState(60)
     const [hasScore, setHasScore] = useState(false)
-    const [addTotalScore, result] = usePostAddScoreMutation()
+    const [addTotalScore] = usePostAddScoreMutation()
     const score = useSelector((state) => state.player.score)
     const playerName = useSelector((state) => state.player.playerName)
     const isStartGame = useSelector((state) => state.player.isStartGame)
@@ -44,14 +43,14 @@ export const CatcherGame = () => {
         alert('Game Over!')
         navigate('/')
     }
-    },[hasScore, addScore, playerName, score])
+    },[hasScore, playerName, score, addTotalScore, navigate])
 
     useEffect(() => {
         if (!playerName){
             alert('Please enter your player name on the main menu')
             navigate('/')
         }
-    },[navigate])
+    },[navigate, playerName])
     
     useEffect(() => {
         const timerIdHolder = {timerId: null}
@@ -89,7 +88,7 @@ export const CatcherGame = () => {
         return () => {
             cancelAnimationFrame(timerIdHolder.timerId)
         }
-    },[boatProps, dispatch])
+    },[boatProps, dispatch, e1Props, e2Props, p1Props, p2Props, p3Props, p4Props])
 
     function loadImages(ctx, canvas){
         let backgroundImg = new Image()

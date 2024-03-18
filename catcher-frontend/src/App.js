@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { Box, Button, Container, Stack, TextField, Typography } from '@mui/material';
+import React from 'react'
+import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import './App.css'
 import { useSelector, useDispatch } from 'react-redux';
-import { resetScore, setPlayerName, startGame, stopGame } from './features/gameSlice';
-import { usePostAddScoreMutation } from './services/scores';
+import { resetScore, setPlayerName, startGame } from './features/gameSlice';
 import { useNavigate } from 'react-router-dom'
 
 function App() {
@@ -38,7 +37,6 @@ function App() {
         <Button fullWidth onClick={() => navigate('/topscores')}>See top scores</Button>
       </Box>
     </Container>
-
   )
 }
 
