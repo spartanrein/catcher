@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import io from 'socket.io-client'
 
 export const scoreApi = createApi({
     reducerPath: 'scoresApi',
@@ -7,7 +8,7 @@ export const scoreApi = createApi({
     endpoints: (builder) => ({
         getScores: builder.query({
             query: () => '/',
-            providesTags:['Scores']
+            providesTags:['Scores'],
         }),
         postAddScore: builder.mutation({
             query: ({playerName, score}) => ({

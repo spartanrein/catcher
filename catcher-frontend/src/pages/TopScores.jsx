@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -6,25 +6,36 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import { useGetScoresQuery } from '../services/scores';
+import { scoreApi, useGetScoresQuery } from '../services/scores';
 import { Box, Stack, TablePagination, Typography } from '@mui/material';
 import Error from './Error';
+import { useWs } from '../hooks/useWs';
+import { useDispatch } from 'react-redux';
 
 function createData(rank, playerName, score) {
   return { rank, playerName, score };
 }
 
 export default function TopScores() {
+    const dispatch = useDispatch()
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
-    const { data, error, isLoading } = useGetScoresQuery()
+    const { data, error, isLoading } = useGetScoresQuery({refetchOnMountOrArgChange: true})
+    const [ready, val, send] = useWs('ws://localhost:5000')
+    
+    useEffect(() => {
+        if (val?.name === 'topscores' && val?.message === 'update'){
+            dispatch(scoreApi.util.resetApiState())
+        }
+    },[val, dispatch])
+
     const scores = data?.map((d, index) => {return createData(index+1, d.playerName, d.score)})
     const handleChangePage = (event, newPage) => {
         setPage(newPage);
     };
     
       const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
+        setRowsPerPage(event.target.value);
         setPage(0);
     };
 
