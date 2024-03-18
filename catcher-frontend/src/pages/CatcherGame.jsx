@@ -1,4 +1,4 @@
-import { React, useRef, useEffect, useState } from 'react'
+import { React, useRef, useEffect, useState, forwardRef } from 'react'
 import boat from '../assets/boat.png'
 import e1 from '../assets/e1.png'
 import e2 from '../assets/e2.png'
@@ -17,10 +17,11 @@ import { Box, Typography, Button } from '@mui/material'
 import { resetScore, setPlayerName, startGame, stopGame, addScore } from '../features/gameSlice';
 import { usePostAddScoreMutation } from '../services/scores';
 import { useNavigate } from 'react-router-dom'
+import { WidthWideOutlined } from '@mui/icons-material'
 
 export const CatcherGame = () => {
     let { boatProps, itemObject } = objectProps;
-    const canvasRef = useRef(null)
+    let canvasRef = useRef(null)
     const [counter, setCounter] = useState(60)
     const [hasScore, setHasScore] = useState(false)
     const [addTotalScore, result] = usePostAddScoreMutation()
@@ -29,8 +30,7 @@ export const CatcherGame = () => {
     const isStartGame = useSelector((state) => state.player.isStartGame)
     const dispatch = useDispatch()
     const navigate = useNavigate()
-    console.log('!!!', isStartGame)
-
+    
     useEffect(() => {
         const timer = isStartGame && counter > 0 && setTimeout(() => setCounter(counter -1), 1000);
         if (counter === 50){
@@ -51,19 +51,20 @@ export const CatcherGame = () => {
             alert('Game Over!')
             navigate('/')
         }
-    },[isStartGame])
-
+    },[isStartGame, navigate])
+    
     useEffect(() => {
+        const timerIdHolder = {timerId: null}
         let canvas = canvasRef.current
         const ctx = canvas.getContext("2d")
         let {backgroundImg, boatImg} = loadImages(ctx, canvas)
+        boatProps.y = canvas.getBoundingClientRect().height - canvas.getBoundingClientRect().height/4
         const render = () => {
             let playerBoat = new BaseObject(ctx, canvas, boatImg, boatProps.x, boatProps.y, boatProps.width)
             canvas.width = window.innerWidth
             canvas.height = window.innerWidth/2
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             ctx.drawImage(backgroundImg,0,0, canvas.width, canvas.height)
-            boatProps.y = canvas.getBoundingClientRect().height - canvas.getBoundingClientRect().height/4
             boatProps.width = canvas.width/12
             renderObject(ctx, canvas, boatImg, playerBoat,  boatProps)
             spawnFallingItem(ctx, canvas, itemObject, boatImg)
@@ -71,11 +72,15 @@ export const CatcherGame = () => {
                 console.log('Collision Detected')
                 dispatch(addScore(10))
                 resetPosition(itemObject, canvas)
-            }      
-            requestAnimationFrame(render)
+            }
+            timerIdHolder.timerId = window.requestAnimationFrame(render)
         }
         render()
-    },[isStartGame])
+        return () => {
+            itemObject.y = 0
+            cancelAnimationFrame(timerIdHolder.timerId)
+        }
+    },[boatProps, dispatch, itemObject])
 
     function loadImages(ctx, canvas){
         let backgroundImg = new Image()
@@ -87,6 +92,12 @@ export const CatcherGame = () => {
         boatImg.src = boat;
         return {backgroundImg, boatImg}
     }
+
+    // <TextField
+    //     label={"Enter Player Name"}
+    //     onChange={(e) => dispatch(setPlayerName(e.target.value))}
+    //     disabled={isStartGame}
+    // />
 
     return (
         <>

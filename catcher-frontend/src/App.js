@@ -4,46 +4,34 @@ import './App.css'
 import { useSelector, useDispatch } from 'react-redux';
 import { resetScore, setPlayerName, startGame, stopGame } from './features/gameSlice';
 import { usePostAddScoreMutation } from './services/scores';
+import { useNavigate } from 'react-router-dom'
 
 function App() {
-  const [counter, setCounter] = useState(60)
-  const [hasScore, setHasScore] = useState(false)
-  const [addScore, result] = usePostAddScoreMutation()
-  const score = useSelector((state) => state.player.score)
-  const playerName = useSelector((state) => state.player.playerName)
-  const isStartGame = useSelector((state) => state.player.isStartGame)
+  const navigate = useNavigate()
   const dispatch = useDispatch()
 
-  
-
     return (
-      <Box sx={{display:'flex', justifyContent:'space-between', width:'100%', alignItems:'center', paddingTop:'12px'}}>
-        <Box>
-          <Typography variant={'h5'}>{`Score: ${score}`}</Typography>
-        </Box>
-        <Box sx={{display:'flex'}}>
-          <TextField
-            label={"Enter Player Name"}
-            onChange={(e) => dispatch(setPlayerName(e.target.value))}
-            disabled={isStartGame}
-          />
+      <Container sx={{height:'100vh'}}>
+        <Box sx={{display:'flex', flexDirection:'column', height:'80%', alignContent:'center', justifyContent:'center'}}>
+          <Box sx={{display:'flex', justifyContent:'center', width:'100%'}}>
+            <Typography variant="h2">Pirate Game</Typography>
+          </Box>
           <Button 
-            onClick={async () => {
-              setHasScore(false)
-              dispatch(resetScore())
-              setCounter(60)
-              dispatch(startGame())
-            }}
-            disabled={playerName === "" || isStartGame}
-            variant={"contained"}>
-              Start!
+            fullWidth 
+            variant="contained" 
+            onClick={            
+              () => {
+                dispatch(startGame())  
+                navigate('/game')
+              }
+            }
+          >Start Game
           </Button>
+          <Button fullWidth onClick={() => navigate('/topscores')}>See top scores</Button>
         </Box>
-        <Box>
-          <Typography variant={'h5'}>{`Timer: ${counter}`}</Typography>
-        </Box>
-      </Box>
-  )
+      </Container>
+
+    )
 }
 
 export default App;
