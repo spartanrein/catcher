@@ -34,7 +34,7 @@ function App() {
           }
         >Start Game
         </Button>
-        <Button fullWidth onClick={() => navigate('/topscores')}>See top scores</Button>
+        <Button fullWidth onClick={() => navigate('/leaderboard')}>See Leaderboard</Button>
       </Box>
     </Container>
   )
