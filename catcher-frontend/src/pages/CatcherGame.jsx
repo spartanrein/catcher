@@ -9,15 +9,13 @@ import p4 from '../assets/p4.png'
 import background from '../assets/bg1.png'
 import { objectProps } from '../data/data'
 import BaseObject from '../objects/BaseObject'
-import { renderObject } from '../utils/utils'
-import { useDispatch } from 'react-redux'
+import { collision, getMousePos, renderObject, resetPosition, spawnFallingItem } from '../utils/utils'
+import { useDispatch, useSelector } from 'react-redux'
 import FallingObject from '../objects/FallingObject'
-import { useSelector } from 'react-redux';
 import { Box, Typography, Button } from '@mui/material'
-import { resetScore, setPlayerName, startGame, stopGame, addScore } from '../features/gameSlice';
+import { stopGame, addScore } from '../features/gameSlice';
 import { usePostAddScoreMutation } from '../services/scores';
 import { useNavigate } from 'react-router-dom'
-import { WidthWideOutlined } from '@mui/icons-material'
 
 export const CatcherGame = () => {
     let { boatProps, e1Props, e2Props, p1Props, p2Props, p3Props, p4Props } = objectProps;
@@ -67,7 +65,6 @@ export const CatcherGame = () => {
             {img: point2Img, data: p2Props},
             {img: point3Img, data: p3Props},
             {img: point4Img, data: p4Props},
-
         ]
         boatProps.y = canvas.getBoundingClientRect().height - canvas.getBoundingClientRect().height/4
         const render = () => {
@@ -79,7 +76,6 @@ export const CatcherGame = () => {
             boatProps.width = canvas.width/12
             renderObject(ctx, canvas, boatImg, playerBoat,  boatProps)
             for (let i = 0; i < fallingObjects.length; i++){
-                console.log('!!!', fallingObjects)
                 spawnFallingItem(ctx, canvas, fallingObjects[i].data, fallingObjects[i].img)
                 if (collision(boatProps, canvas.width/12, fallingObjects[i].data, canvas.width/14, 10)){
                     console.log('Collision Detected')
@@ -135,41 +131,6 @@ export const CatcherGame = () => {
                 </Box>
             </Box>  
         </>
-    )
-}
-
-function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
-    return {
-        x: evt.clientX - rect.left,
-        y: evt.clientY - rect.top
-    }
-}
-
-function spawnFallingItem(ctx, canvas, itemObject, image) {
-    let item = new FallingObject(ctx, canvas, image, itemObject.x, itemObject.y,  canvas.width/14, 10)
-    item.render()
-    if (itemObject.x === 0){
-        resetPosition(itemObject, canvas)
-    }
-    if (itemObject.y < canvas.height){
-        itemObject.y+= itemObject.speed
-    } else {
-        resetPosition(itemObject, canvas)
-    }
-}
-
-function resetPosition(object, canvas){
-    object.x = Math.floor(Math.random() * canvas.width)
-    object.y = Math.floor(Math.random() * -1000) 
-}
-
-function collision(boatProps, boatWidth, object, objectWidth ) {
-    return (
-        boatProps.x + boatWidth >= object.x &&
-        boatProps.x <= object.x + objectWidth &&
-        boatProps.y + boatWidth >= object.y &&
-        boatProps.y <= object.y + objectWidth
     )
 }
 
