@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, {useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,15 +7,26 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { useGetScoresQuery } from '../services/scores';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Stack, TablePagination, Typography } from '@mui/material';
 
 function createData(rank, playerName, score) {
   return { rank, playerName, score };
 }
 
 export default function TopScores() {
+    const [page, setPage] = useState(0)
+    const [rowsPerPage, setRowsPerPage] = useState(10)
     const { data, error, isLoading } = useGetScoresQuery()
     const scores = data?.map((d, index) => {return createData(index+1, d.playerName, d.score)})
+
+    const handleChangePage = (event, newPage) => {
+        setPage(newPage);
+    };
+    
+      const handleChangeRowsPerPage = (event) => {
+        setRowsPerPage(+event.target.value);
+        setPage(0);
+    };
 
     return (
         <>
@@ -35,7 +46,7 @@ export default function TopScores() {
                     </TableRow>
                 </TableHead>
                 <TableBody>
-                    {scores?.map((row) => (
+                    {scores?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((row) => (
                     <TableRow
                         key={row.rank}
                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -50,6 +61,15 @@ export default function TopScores() {
                 </TableBody>
                 </Table>
             </TableContainer>
+            <TablePagination
+                rowsPerPageOptions={[10, 25, 100]}
+                component="div"
+                count={scores.length}
+                rowsPerPage={rowsPerPage}
+                page={page}
+                onPageChange={handleChangePage}
+                onRowsPerPageChange={handleChangeRowsPerPage}
+            />
         </>
     );
 }
