@@ -20,7 +20,7 @@ import { useNavigate } from 'react-router-dom'
 import { WidthWideOutlined } from '@mui/icons-material'
 
 export const CatcherGame = () => {
-    let { boatProps, itemObject } = objectProps;
+    let { boatProps, e1Props, e2Props, p1Props, p2Props, p3Props, p4Props } = objectProps;
     let canvasRef = useRef(null)
     const [counter, setCounter] = useState(60)
     const [hasScore, setHasScore] = useState(false)
@@ -43,21 +43,32 @@ export const CatcherGame = () => {
     useEffect(() => {
     if (hasScore && score > 0){
         addTotalScore({score:score, playerName: playerName})
+        alert('Game Over!')
+        navigate('/')
     }
     },[hasScore, addScore, playerName, score])
 
     useEffect(() => {
-        if (!isStartGame){
-            alert('Game Over!')
+        if (!playerName){
+            alert('Please enter your player name on the main menu')
             navigate('/')
         }
-    },[isStartGame, navigate])
+    },[navigate])
     
     useEffect(() => {
         const timerIdHolder = {timerId: null}
         let canvas = canvasRef.current
         const ctx = canvas.getContext("2d")
-        let {backgroundImg, boatImg} = loadImages(ctx, canvas)
+        let { backgroundImg, boatImg, enemy1Img,enemy2Img,point1Img,point2Img, point3Img, point4Img } = loadImages(ctx, canvas)
+        const fallingObjects = [
+            {img: enemy1Img, data: e1Props},
+            {img: enemy2Img, data: e2Props},
+            {img: point1Img, data: p1Props},
+            {img: point2Img, data: p2Props},
+            {img: point3Img, data: p3Props},
+            {img: point4Img, data: p4Props},
+
+        ]
         boatProps.y = canvas.getBoundingClientRect().height - canvas.getBoundingClientRect().height/4
         const render = () => {
             let playerBoat = new BaseObject(ctx, canvas, boatImg, boatProps.x, boatProps.y, boatProps.width)
@@ -67,30 +78,45 @@ export const CatcherGame = () => {
             ctx.drawImage(backgroundImg,0,0, canvas.width, canvas.height)
             boatProps.width = canvas.width/12
             renderObject(ctx, canvas, boatImg, playerBoat,  boatProps)
-            spawnFallingItem(ctx, canvas, itemObject, boatImg)
-            if (collision(boatProps, canvas.width/12, itemObject, canvas.width/14, 10)){
-                console.log('Collision Detected')
-                dispatch(addScore(10))
-                resetPosition(itemObject, canvas)
+            for (let i = 0; i < fallingObjects.length; i++){
+                console.log('!!!', fallingObjects)
+                spawnFallingItem(ctx, canvas, fallingObjects[i].data, fallingObjects[i].img)
+                if (collision(boatProps, canvas.width/12, fallingObjects[i].data, canvas.width/14, 10)){
+                    console.log('Collision Detected')
+                    dispatch(addScore(fallingObjects[i].data.score))
+                    resetPosition(fallingObjects[i].data, canvas)
+                }
             }
             timerIdHolder.timerId = window.requestAnimationFrame(render)
         }
         render()
         return () => {
-            itemObject.y = 0
             cancelAnimationFrame(timerIdHolder.timerId)
         }
-    },[boatProps, dispatch, itemObject])
+    },[boatProps, dispatch])
 
     function loadImages(ctx, canvas){
         let backgroundImg = new Image()
+        let boatImg = new Image()
+        let enemy1Img = new Image()
+        let enemy2Img = new Image()
+        let point1Img = new Image()
+        let point2Img = new Image()
+        let point3Img = new Image()
+        let point4Img = new Image()
         backgroundImg.src = background
         backgroundImg.onload = () => {
             ctx.drawImage(backgroundImg,0,0, canvas.width, canvas.height)
         }
-        let boatImg = new Image()
         boatImg.src = boat;
-        return {backgroundImg, boatImg}
+        enemy1Img.src = e1;
+        enemy2Img.src = e2;
+        point1Img.src = p1;
+        point2Img.src = p2;
+        point3Img.src = p3;
+        point4Img.src = p4;
+
+        return {backgroundImg, boatImg, enemy1Img,enemy2Img,point1Img,point2Img, point3Img, point4Img}
     }
 
     return (
@@ -123,6 +149,9 @@ function getMousePos(canvas, evt) {
 function spawnFallingItem(ctx, canvas, itemObject, image) {
     let item = new FallingObject(ctx, canvas, image, itemObject.x, itemObject.y,  canvas.width/14, 10)
     item.render()
+    if (itemObject.x === 0){
+        resetPosition(itemObject, canvas)
+    }
     if (itemObject.y < canvas.height){
         itemObject.y+= itemObject.speed
     } else {
