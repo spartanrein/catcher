@@ -36,8 +36,12 @@ Request:
 * Method: POST
 * Content-Type: application/json
 * Body:
- ```{"playerName": "string",(required),```
- ```"score": "integer" (required)} ```
+ ```
+	 {
+		 "playerName": "string",(required),
+		 "score": "integer" (required)}
+	 }
+```
 
 Response:
 * Format: JSON
