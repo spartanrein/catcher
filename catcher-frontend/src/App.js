@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom'
 function App() {
   const navigate = useNavigate()
   const dispatch = useDispatch()
-  const playerName = useSelector((state) => state.player.playerName)
 
   return (
     <Container sx={{height:'100vh'}}>
@@ -16,15 +15,9 @@ function App() {
         <Box sx={{display:'flex', justifyContent:'center', width:'100%'}}>
           <Typography variant="h2">Pirate Game</Typography>
         </Box>
-        <TextField
-            value={playerName}
-            label={"Enter Player Name to Start"}
-            onChange={(e) => dispatch(setPlayerName(e.target.value))}
-            />
         <Button 
           fullWidth 
           variant="contained" 
-          disabled={!playerName}
           onClick={            
             () => {
               dispatch(resetScore())

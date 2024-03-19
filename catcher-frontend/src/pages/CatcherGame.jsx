@@ -11,8 +11,8 @@ import { objectProps } from '../data/data'
 import BaseObject from '../objects/BaseObject'
 import { collision, getMousePos, renderObject, resetPosition, spawnFallingItem } from '../utils/utils'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Typography } from '@mui/material'
-import { stopGame, addScore } from '../features/gameSlice';
+import { Box, Typography, TextField, Container, Button } from '@mui/material'
+import { stopGame, addScore, setPlayerName } from '../features/gameSlice';
 import { usePostAddScoreMutation } from '../services/scores';
 import { useNavigate } from 'react-router-dom'
 
@@ -30,27 +30,12 @@ export const CatcherGame = () => {
     
     useEffect(() => {
         const timer = isStartGame && counter > 0 && setTimeout(() => setCounter(counter -1), 1000);
-        if (counter === 0){
+        if (counter === 60){
           dispatch(stopGame())
-          setHasScore(true)
         }
         return () => clearInterval(timer)
     },[counter, isStartGame, dispatch])
     
-    useEffect(() => {
-    //Check if user has player name set in main manu
-    if (!playerName){
-        alert('Please enter your player name on the main menu')
-        navigate('/')
-    }
-
-    if (hasScore && score > 0){
-        addTotalScore({score:score, playerName: playerName})
-        alert('Game Over!')
-        navigate('/')
-    }
-    },[hasScore, playerName, score, addTotalScore, navigate])
-
     useEffect(() => {
         const timerIdHolder = {timerId: null}
         let canvas = canvasRef.current
@@ -115,19 +100,41 @@ export const CatcherGame = () => {
 
     return (
         <>
-            <canvas
-                ref={canvasRef} 
-                id="canvas"
-                onMouseMove={ (evt) => boatProps.x = getMousePos(canvasRef.current, evt).x -50 }
-            />
-            <Box sx={{display:'flex', justifyContent:'space-between', width:'100%', alignItems:'center', paddingTop:'12px'}}>
-                <Box>
-                    <Typography variant={'h5'}>{`Score: ${score}`}</Typography>
+            {isStartGame ? <>
+                <canvas
+                    ref={canvasRef} 
+                    id="canvas"
+                    onMouseMove={ (evt) => boatProps.x = getMousePos(canvasRef.current, evt).x -50 }
+                />
+                <Box sx={{display:'flex', justifyContent:'space-between', width:'100%', alignItems:'center', paddingTop:'12px'}}>
+                    <Box>
+                        <Typography variant={'h5'}>{`Score: ${score}`}</Typography>
+                    </Box>
+                    <Box>
+                        <Typography variant={'h5'}>{`Timer: ${counter}`}</Typography>
+                    </Box>
                 </Box>
-                <Box>
-                    <Typography variant={'h5'}>{`Timer: ${counter}`}</Typography>
-                </Box>
-            </Box>  
+            </> :
+                <Container>
+                    <Box sx={{display:'flex', width:'100%', height:"100vh", justifyContent:'center', alignItems:'center', flexDirection:'column'}}>
+                        <Typography variant="h2">Game Over!</Typography>
+                        <TextField
+                            value={playerName}
+                            label={"Enter Player Name"}
+                            onChange={(e) => dispatch(setPlayerName(e.target.value))}
+                        />
+                        <Button
+                            disabled={!playerName}
+                            onClick={() => {
+                                addTotalScore({score:score, playerName: playerName})
+                                navigate('/leaderboard')
+                            }}
+                        >submit top score
+                        </Button>
+                    </Box>
+                </Container>
+                
+            }  
         </>
     )
 }
