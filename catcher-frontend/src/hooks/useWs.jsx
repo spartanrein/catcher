@@ -18,6 +18,12 @@ export const useWs = ({ url }) => {
             setVal(arg)
         })
 
+        socket.on("connect_error", () => {
+            setTimeout(() => {
+              socket.connect();
+            }, 1000);
+        });
+
         ws.current = socket
 
         return () => {
