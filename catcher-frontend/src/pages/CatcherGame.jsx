@@ -46,13 +46,13 @@ export const CatcherGame = () => {
             {img: point3Img, data: p3Props},
             {img: point4Img, data: p4Props},
         ]
-        boatProps.y = canvas.getBoundingClientRect().height - canvas.getBoundingClientRect().height/4
         const render = () => {
             let playerBoat = new BaseObject(ctx, canvas, boatImg, boatProps.x, boatProps.y, boatProps.width)
             canvas.width = window.innerWidth
             canvas.height = window.innerWidth/2
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             ctx.drawImage(backgroundImg,0,0, canvas.width, canvas.height)
+            boatProps.y = canvas.getBoundingClientRect().height - canvas.getBoundingClientRect().height/4
             boatProps.width = canvas.width/12
             renderObject(ctx, canvas, boatImg, playerBoat,  boatProps)
             for (let i = 0; i < fallingObjects.length; i++){
