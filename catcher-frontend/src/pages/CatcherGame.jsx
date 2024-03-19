@@ -11,31 +11,28 @@ import { objectProps } from '../data/data'
 import BaseObject from '../objects/BaseObject'
 import { collision, getMousePos, renderObject, resetPosition, spawnFallingItem } from '../utils/utils'
 import { useDispatch, useSelector } from 'react-redux'
-import { Box, Typography, TextField, Container, Button } from '@mui/material'
-import { stopGame, addScore, setPlayerName } from '../features/gameSlice';
-import { usePostAddScoreMutation } from '../services/scores';
-import { useNavigate } from 'react-router-dom'
+import { Box, Typography } from '@mui/material'
+import { stopGame, addScore, } from '../features/gameSlice';
+import GameOver from './GameOver'
 
 export const CatcherGame = () => {
     let { boatProps, e1Props, e2Props, p1Props, p2Props, p3Props, p4Props } = objectProps;
     let canvasRef = useRef(null)
     const [counter, setCounter] = useState(60)
-    const [hasScore, setHasScore] = useState(false)
-    const [addTotalScore] = usePostAddScoreMutation()
     const score = useSelector((state) => state.player.score)
-    const playerName = useSelector((state) => state.player.playerName)
     const isStartGame = useSelector((state) => state.player.isStartGame)
     const dispatch = useDispatch()
-    const navigate = useNavigate()
     
+    //Stop game after 60 seconds
     useEffect(() => {
         const timer = isStartGame && counter > 0 && setTimeout(() => setCounter(counter -1), 1000);
-        if (counter === 60){
+        if (counter === 0){
           dispatch(stopGame())
         }
         return () => clearInterval(timer)
     },[counter, isStartGame, dispatch])
     
+    //Draw game on canvas
     useEffect(() => {
         const timerIdHolder = {timerId: null}
         let canvas = canvasRef.current
@@ -115,25 +112,7 @@ export const CatcherGame = () => {
                     </Box>
                 </Box>
             </> :
-                <Container>
-                    <Box sx={{display:'flex', width:'100%', height:"100vh", justifyContent:'center', alignItems:'center', flexDirection:'column'}}>
-                        <Typography variant="h2">Game Over!</Typography>
-                        <TextField
-                            value={playerName}
-                            label={"Enter Player Name"}
-                            onChange={(e) => dispatch(setPlayerName(e.target.value))}
-                        />
-                        <Button
-                            disabled={!playerName}
-                            onClick={() => {
-                                addTotalScore({score:score, playerName: playerName})
-                                navigate('/leaderboard')
-                            }}
-                        >submit top score
-                        </Button>
-                    </Box>
-                </Container>
-                
+                <GameOver/>
             }  
         </>
     )
