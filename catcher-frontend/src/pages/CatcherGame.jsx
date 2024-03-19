@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Box, Typography } from '@mui/material'
 import { stopGame, addScore, } from '../features/gameSlice';
 import GameOver from './GameOver'
+import '../App.css'
 
 export const CatcherGame = () => {
     let { boatProps, e1Props, e2Props, p1Props, p2Props, p3Props, p4Props } = objectProps;
@@ -48,8 +49,8 @@ export const CatcherGame = () => {
         ]
         const render = () => {
             let playerBoat = new BaseObject(ctx, canvas, boatImg, boatProps.x, boatProps.y, boatProps.width)
-            canvas.width = window.innerWidth
-            canvas.height = window.innerWidth/2
+            canvas.width = window.innerWidth > 1920 ? 1920 : window.innerWidth
+            canvas.height = window.innerWidth > 1920 ? 1080 : window.innerWidth /1.778
             ctx.clearRect(0, 0, canvas.width, canvas.height)
             ctx.drawImage(backgroundImg,0,0, canvas.width, canvas.height)
             boatProps.y = canvas.getBoundingClientRect().height - canvas.getBoundingClientRect().height/4
@@ -63,13 +64,17 @@ export const CatcherGame = () => {
                     resetPosition(fallingObjects[i].data, canvas)
                 }
             }
+            ctx.font = canvas.width < 1920 ? `${25}px arial-serif` : `${50}px arial-serif`
+            ctx.textAlign = "center"
+            ctx.fillText(counter, canvas.width/2, 50)
+            ctx.fillText(`Score: ${score}`, canvas.width/8, 50)
             timerIdHolder.timerId = window.requestAnimationFrame(render)
         }
         render()
         return () => {
             cancelAnimationFrame(timerIdHolder.timerId)
         }
-    },[boatProps, dispatch, e1Props, e2Props, p1Props, p2Props, p3Props, p4Props])
+    },[boatProps, dispatch, e1Props, e2Props, p1Props, p2Props, p3Props, p4Props, counter, score])
 
     function loadImages(ctx, canvas){
         let backgroundImg = new Image()
@@ -98,19 +103,22 @@ export const CatcherGame = () => {
     return (
         <>
             {isStartGame ? <>
-                <canvas
-                    ref={canvasRef} 
-                    id="canvas"
-                    onMouseMove={ (evt) => boatProps.x = getMousePos(canvasRef.current, evt).x -50 }
-                />
-                <Box sx={{display:'flex', justifyContent:'space-between', width:'100%', alignItems:'center', paddingTop:'12px'}}>
+                {/* <Box sx={{display:'flex', justifyContent:'space-between', width:'100%', alignItems:'center', paddingTop:'12px'}}>
                     <Box>
                         <Typography variant={'h5'}>{`Score: ${score}`}</Typography>
                     </Box>
                     <Box>
                         <Typography variant={'h5'}>{`Timer: ${counter}`}</Typography>
                     </Box>
+                </Box> */}
+                <Box sx={{display:'flex', justifyContent:'center'}}>
+                    <canvas
+                        ref={canvasRef} 
+                        id="canvas"
+                        onMouseMove={ (evt) => boatProps.x = getMousePos(canvasRef.current, evt).x -50 }
+                    />
                 </Box>
+                
             </> :
                 <GameOver/>
             }  
