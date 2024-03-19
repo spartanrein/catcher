@@ -7,7 +7,7 @@ export const scoreApi = createApi({
     tagTypes:['Scores'],
     endpoints: (builder) => ({
         getScores: builder.query({
-            query: () => '/',
+            query: ({count}) => `/?count=${count}`,
             providesTags:['Scores'],
         }),
         postAddScore: builder.mutation({

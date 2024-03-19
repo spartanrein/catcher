@@ -20,7 +20,7 @@ export default function TopScores() {
     const dispatch = useDispatch()
     const [page, setPage] = useState(0)
     const [rowsPerPage, setRowsPerPage] = useState(10)
-    const { data, error, isLoading } = useGetScoresQuery({refetchOnMountOrArgChange: true})
+    const { data, error, isLoading } = useGetScoresQuery({count:100},{refetchOnMountOrArgChange: true})
     const [ready, val, send] = useWs('ws://localhost:5000')
     
     useEffect(() => {

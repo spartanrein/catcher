@@ -27,7 +27,7 @@ const db = client.db('test')
 const collection = db.collection('scores')
 const changeStream = collection.watch()
 changeStream.on('change', async (change) => {
-    console.log(change)
+    console.log("DB change detected, emit to websocket")
     socketio.emit('message', {name:'topscores', message:"update"})
 })
 server.listen(PORT, () => {

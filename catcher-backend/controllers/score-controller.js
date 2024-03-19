@@ -13,7 +13,8 @@ const score_create_post = (req, res) => {
 
 //get top 100 scores
 const score_index = (req, res) => {
-    Score.find().sort({ score: -1}).limit(100)
+    console.log(req.query.count)
+    Score.find().sort({ score: -1}).limit(req.query.count)
         .then((result) => {
             res.send(result)
     })
