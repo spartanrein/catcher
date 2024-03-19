@@ -14,7 +14,6 @@ const socketio = require('socket.io')(server, {
         methods: ["GET", "POST"]
       }
 });
-// const io = socketio(server)
 const PORT = process.env.PORT || 5000
 const Score = require('./models/scoreModel')
 
