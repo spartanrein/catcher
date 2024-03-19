@@ -36,18 +36,26 @@ Request:
 * Method: POST
 * Content-Type: application/json
 * Body:
-{"playerName": "string",(required),
-"score": "integer" (required)}
+ ```{"playerName": "string",(required),```
+ ```"score": "integer" (required)} ```
 
 Response:
 * Format: JSON
 * Body example:
-	*JSON{"playerName":  "winner winner",
-  	"score":  855,
-  	"_id":  "65f8d08a4a947d23e57cda46",
-  	"createdAt":  "2024-03-18T23:38:50.731Z",
-  	"updatedAt":  "2024-03-18T23:38:50.731Z","__v":  0}
+```
+	{
+		"playerName":  "winner winner",
+		"score":  855,
+		"_id":  "65f8d08a4a947d23e57cda46",
+		"createdAt":  "2024-03-18T23:38:50.731Z",
+		"updatedAt":  "2024-03-18T23:38:50.731Z","__v":  0
+	}
+```
 
 Example Request:
 POST /scores HTTP/1.1 Content-Type: application/json
- { "playerName": "John Doe", "score": 7800 }
+ ```
+	 { 
+		 "playerName": "John Doe", "score": 7800 
+	 }
+ ```
