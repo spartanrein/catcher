@@ -57,7 +57,9 @@ Response:
 ```
 
 Example Request:
-POST /scores HTTP/1.1 Content-Type: application/json
+POST /scores 
+HTTP/1.1 
+Content-Type: application/json
  ```
 	 { 
 		 "playerName": "John Doe", "score": 7800 
