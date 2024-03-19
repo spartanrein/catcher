@@ -1,10 +1,9 @@
-import React, {useEffect } from 'react'
+import React from 'react'
 import { Box, Button, Container, TextField, Typography } from '@mui/material';
 import './App.css'
-import { useSelector, useDispatch } from 'react-redux';
+import {  useDispatch } from 'react-redux';
 import { resetScore, startGame } from './features/gameSlice';
 import { useNavigate } from 'react-router-dom'
-import boat from './assets/boat.png'
 import e1 from './assets/e1.png'
 import e2 from './assets/e2.png'
 import p1 from './assets/p1.png'
