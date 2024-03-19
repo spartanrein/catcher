@@ -17,6 +17,8 @@ Frontend:
 
 ###  Backend Api Endpoints:
 
+##### There is a websocket connection between the apps.  The BE will emit a message when the mongdb collection is changed.  When this happens, the FE refreshes the topscore cache.
+
 #### GET /scores
 Retrieves a specified number of score documents from MongoDB.
 
