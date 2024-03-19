@@ -1,5 +1,6 @@
 ## Catcher Game
 An in-browser game built on MERN stack
+The game is deployed on [HEROKU]([https://duckduckgo.com](https://reiner-catcher-frontend-cf9af3651b63.herokuapp.com/)) 
 ##
 
 ### Instructions:
